@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+    <title>TOP ToDo List Project</title>
+</head>
+<body>
+    <header>ToDo List</header>
+    <aside class="project-space">
+        <div class="buttons add-project">Create New Project</div>
+        <form class="project-form">
+            <label>Title</label>
+            <input class="title" type="text" required>
+            <label>Deadline</label>
+            <input class="deadline" type="date" required>
+            <div class="form-buttons">
+                <button class="submit-project" type="submit">ADD PROJECT</button>
+                <button class="cancel-project">CANCEL</button>
+            </div>
+        </form>
+        <div class="projects"></div>
+    </aside>
+    <section class="task-space">
+        <div class="buttons add-task">Create New Task</div>
+        <form class="task-form">
+            <label>What needs to be done</label>
+            <input class="task-name" type="text" required>
+            <label>Deadline</label>
+            <input class="task-deadline" type="date" required>
+            <div class="form-buttons">
+                <button class="submit-task" type="submit">ADD TASK</button>
+                <button class="cancel-task">CANCEL</button>
+            </div>
+        </form>
+        <div class="tasks"></div>
+    </section>
+    <script src="main.js"></script>
+</body>
