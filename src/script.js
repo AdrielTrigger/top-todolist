@@ -97,6 +97,7 @@ if (loadData() == true) {
     for (let i = 0; i < projects.length; i++) {
         projects[i].style.setProperty('border','none');
     }
+    activeProject = null;
 }
 
 export { activeProject, defineActiveProject, projectDeletion, htmlProjectList, htmlTaskList }
