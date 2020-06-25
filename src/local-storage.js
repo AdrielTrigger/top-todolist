@@ -42,7 +42,7 @@ function getData(list) {
             }
             tasks.push(savedTaskList);
         } else {
-            tasks.push = [];
+            tasks.push([]);
         }
     }
     localStorage.setItem('projects',JSON.stringify(projects));
@@ -57,7 +57,7 @@ function loadData () {
         for (let i = 0; i < projects.length; i++) {
             //this reclaims project #i's title and deadline by referring to the position in which they were saved
             let project = new ProjectItem(projects[i][0],projects[i][1]);
-            if (tasks[i] != undefined) {
+            if (tasks[i].length > 0) {
                 for (let j = 0; j < tasks[i].length; j++) {
                     let task = new TaskItem(tasks[i][j][0],tasks[i][j][1],project);
                 }
