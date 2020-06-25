@@ -1,104 +1,194 @@
+/* simple reset */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: rgb(168, 168, 168);
 }
 
+
+/* grid-based layout */
+
 body {
+    height: 100vh;
+    width: 100vw;
+    min-width: 900px;
     display: grid;
     grid-template: repeat(10,1fr) / repeat(10,1fr);
-    height: 100vh;
-    min-width: 960px;
 }
 
 header {
-    border: 4px solid blue;
-    grid-area: 1 / 1 / 2 / span 10;
     min-height: 90px;
+    grid-area: 1 / 1 / span 1 / span 10;
+    background: linear-gradient(rgb(14, 85, 97), rgb(59, 182, 204));
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 80px;
 }
 
-.project-space {
-    border: 4px solid green;
+.project-area {
     grid-area: 2 / 1 / span 9 / span 3;
-    overflow: scroll;
+    background: linear-gradient(rgb(83, 199, 219), rgb(14, 85, 97));
+    font-family: 'Varela Round', sans-serif;
 }
 
-.task-space {
-    border: 4px solid gold;
+.task-area {
     grid-area: 2 / 4 / span 9 / span 7;
-    overflow: scroll;
+    background: linear-gradient(white,rgb(94, 216, 238));
+    font-family: 'Nunito', sans-serif;
 }
 
-.project-space, .task-space, .projects, .tasks {
+.project-area, .task-area {
     display: flex;
     flex-direction: column;
-    justify-content: start;
     align-items: center;
 }
 
-.projects, .tasks {
-    width: 95%;
-}
 
-.project-item, .task-item {
-    width: 100%;
-    height: 80px;
-    border: 4px solid orange;
-    margin: 5px 0;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
+/* buttons and forms */
 
-.buttons {
-    width: 90%;
-    height: 60px;
-    font-size: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 3px solid black;
+.create-project, .create-task, .project-form, .task-form {
+    width: 300px;
+    margin-top: 20px;
+    padding: 20px 0;
     border-radius: 15px;
-    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .project-form, .task-form {
-    border: 4px solid gray;
-    width: 100%;
-    max-width: 300px;
-    height: 200px;
     display: none;
-    flex-direction: column;
+}
+
+.create-project, .project-form {
+    background-color: white;
+    color: rgb(34, 139, 158);
+    font-size: 20px;
+}
+
+.project-buttons, .task-buttons {
+    width: 100%;
+    height: 50px;
+    display: flex;
     justify-content: space-evenly;
-    align-items: center;
+}
+
+.project-buttons button {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: rgb(34, 139, 158);
+    color: white;
+}
+
+.project-buttons button:hover, .task-buttons button:hover,
+.create-project:hover, .create-task:hover,
+.project-item-buttons div:hover, .task-item-buttons div:hover {
+    border: 3px solid rgba(0, 224, 112, 0.842);
+}
+
+.project-buttons button:active, .task-buttons button:active,
+.create-project:active, .create-task:active,
+.project-item-buttons div:active, .task-item-buttons div:active {
+    border: 3px solid gold;
+}
+
+.create-task, .task-form {
+    background-color: rgb(61, 184, 206);
+    color: white;
+    font-size: 20px;
+}
+
+.task-buttons button {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: white;
+    color: rgb(61, 184, 206);
 }
 
 input {
-    width: 200px;
+    width: 90%;
     height: 30px;
+    font-size: 20px;
+    margin-bottom: 20px;
 }
 
-.form-buttons {
-    width: 100%;;
+
+/* content holders and project and task items */
+
+.project-list, .task-list {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: scroll;
+}
+
+.project-item, .task-item {
+    width: 80%;
+    height: 80px;
+    border-radius: 15px;
+    margin-top: 20px;
+    padding: 5px;
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
 }
 
-.submit-project, .cancel-project, .submit-task, .cancel-task {
+.project-item {
+    background-color: white;
+    color: rgb(83, 199, 219);
+}
+
+.project-data, .task-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 85%;
+    width: 70%;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.project-data {
+    background-color: rgb(83, 199, 219);
+    color: white;
+}
+
+.project-item-buttons, .task-item-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 20%;
+    height: 85%;
+}
+
+.project-item-buttons div, .task-item-buttons div {
     display: flex;
     justify-content: center;
-    align-items: center;
-    border: 1px solid grey;
-    width: 100px;
-    height: 40px;
+    width: 100%;
+    border-radius: 5px;
+    margin: 3px;
+    padding: 3px;
 }
 
-.submit-project:hover, .cancel-project:hover, .sumbit-task:hover, .cancel-task:hover {
-    background-color: gray;
+.project-item-buttons div {
+    background-color: rgb(83, 199, 219);
+    color: white;
+}
+
+.task-item-buttons div {
+    background-color: white;
+    color: rgb(83, 199, 219);
+}
+
+.task-item {
+    background-color: rgb(83, 199, 219);
     color: white;
 }

@@ -1,48 +1,30 @@
-import { renderTaskList } from './render.js'
-import { tasks } from './script.js'
-
-// creates a logical list of project objects
 const projectList = (() => {
-
     let list = [];
-
-    const addProject = (project) => {
-        list.push(project);
-    };
-
-    return { list, addProject };
-
+    return { list }
 })();
 
-// rules and mechanisms of project objects
 class ProjectItem {
-
     constructor(title,deadline) {
         this.title = title;
         this.deadline = deadline;
         this.position = projectList.list.length;
         this.taskList = [];
-        projectList.addProject(this);
-
-        tasks.innerHTML = '';
-        renderTaskList(this,tasks);
-    }
-
-    addTask(task) {
-        this.taskList.push(task);
+        projectList.list.push(this);
     }
     
+    addTask(task) {
+        task.position = this.taskList.length;
+        this.taskList.push(task);
+    }
 }
 
 class TaskItem {
-    
-    constructor(name,deadline,project) {
-        this.name = name;
+    constructor(title,deadline,project) {
+        this.title = title;
         this.deadline = deadline;
-        this.position = project.taskList.length;
+        this.position;
         project.addTask(this);
     }
-
 }
 
 export { projectList, ProjectItem, TaskItem }

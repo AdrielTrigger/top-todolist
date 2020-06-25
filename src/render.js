@@ -1,63 +1,119 @@
-import { projects, tasks, activeProject } from './script.js'
-import { projectList } from './project-and-task.js';
+import { activeProject, defineActiveProject, projectDeletion, htmlProjectList, htmlTaskList } from './script.js'
+import { projectList } from './project-and-task.js'
+import { getData } from './local-storage.js';
 
-function renderProjectItem(project) {
+function renderProject (project,listHolder) {
+    let title = project.title;
+    let deadline = project.deadline;
+    let removal = false;
+
     let htmlTitle = document.createElement('span');
     let htmlDeadline = document.createElement('span');
+    let htmlProjectData = document.createElement('div');
+    let buttons = document.createElement('div');
+    let editButton = document.createElement('div');
+    let deleteButton = document.createElement('div');
     let htmlProject = document.createElement('div');
 
-    htmlTitle.innerHTML = project.title;
-    htmlDeadline.innerHTML = project.deadline;
+    htmlTitle.innerHTML = `TITLE: ${title}`;
+    htmlDeadline.innerHTML = `DEADLINE: ${deadline}`;
+    editButton.innerHTML = 'EDIT';
+    deleteButton.innerHTML = 'DELETE';
 
-    htmlProject.appendChild(htmlTitle);
-    htmlProject.appendChild(htmlDeadline);
+    htmlProjectData.appendChild(htmlTitle);
+    htmlProjectData.appendChild(htmlDeadline);
+    htmlProjectData.classList.add('project-data');
+    
+    buttons.appendChild(editButton);
+    buttons.appendChild(deleteButton);
+    buttons.classList.add('project-item-buttons');
+
+    htmlProject.appendChild(htmlProjectData);
+    htmlProject.appendChild(buttons);
     htmlProject.classList.add('project-item');
+    listHolder.appendChild(htmlProject);
 
-    return htmlProject;
+    htmlProject.addEventListener('click', () => {
+        if (removal != true) {
+            makeActive(project,htmlProject);
+            htmlTaskList.innerHTML = '';
+            renderTaskList(project);
+        }
+    });
+
+    deleteButton.addEventListener('click', () => {
+        removal = true;
+        listHolder.removeChild(htmlProject);
+        projectList.list.splice(project.position,1);
+        htmlTaskList.innerHTML = '';
+        projectDeletion(project);
+        getData(projectList.list);
+    });
+
+    makeActive(project,htmlProject);
+    getData(projectList.list);
 }
 
-function renderTaskItem(task) {
-    let htmlName = document.createElement('span');
+function renderTask (task,listHolder) {
+    let title = task.title;
+    let deadline = task.deadline;
+
+    let htmlTitle = document.createElement('span');
     let htmlDeadline = document.createElement('span');
+    let htmlTaskData = document.createElement('div');
+    let buttons = document.createElement('div');
+    let editButton = document.createElement('div');
+    let deleteButton = document.createElement('div');
     let htmlTask = document.createElement('div');
 
-    htmlName.innerHTML = task.name;
-    htmlDeadline.innerHTML = task.deadline;
-    htmlTask.appendChild(htmlName);
-    htmlTask.appendChild(htmlDeadline);
+    htmlTitle.innerHTML = `TITLE: ${title}`;
+    htmlDeadline.innerHTML = `DEADLINE: ${deadline}`;
+    editButton.innerHTML = 'EDIT';
+    deleteButton.innerHTML = 'DELETE';
+
+    htmlTaskData.appendChild(htmlTitle);
+    htmlTaskData.appendChild(htmlDeadline);
+    htmlTaskData.classList.add('task-data');
+
+    buttons.appendChild(editButton);
+    buttons.appendChild(deleteButton);
+    buttons.classList.add('task-item-buttons');
+
+    htmlTask.appendChild(htmlTaskData);
+    htmlTask.appendChild(buttons);
     htmlTask.classList.add('task-item');
+    listHolder.appendChild(htmlTask);
 
-    let cancelButton = document.createElement('button');
-    cancelButton.innerHTML = 'Cancel Task';
-    cancelButton.addEventListener('click', () => {
+    deleteButton.addEventListener('click', () => {
         activeProject.taskList.splice(task.position,1);
-        tasks.removeChild(htmlTask);
+        listHolder.removeChild(htmlTask);
+        getData(projectList.list);
     });
-    htmlTask.appendChild(cancelButton);
 
-    return htmlTask;
+    getData(projectList.list);
 }
 
-function renderProjectList(projectList,listHolder) {
-    let i = 0;
-    let list = projectList.list;
+function renderProjectList (list) {
+    for (let i = 0; i < list.length; i++) {
+        renderProject(list[i],htmlProjectList);
+    }
+}
+
+function renderTaskList (project) {
+    for (let i = 0; i < project.taskList.length; i++) {
+        renderTask(project.taskList[i],htmlTaskList);
+    }
+}
+
+function makeActive (project,htmlProject) {
+    defineActiveProject(project);
+    let projects = document.querySelectorAll('.project-item');
     
-    while (i < list.length) {
-        let listItem = renderProjectItem(list[i]);
-        listHolder.appendChild(listItem);
-        i++;
+    for (let i = 0; i < projects.length; i++) {
+        projects[i].style.setProperty('border','none');
     }
+
+    htmlProject.style.setProperty('border','3px solid blue');
 }
 
-function renderTaskList(project,listHolder) {
-    let i = 0;
-    let list = project.taskList;
-
-    while (i < list.length) {
-        let listItem = renderTaskItem(list[i]);
-        listHolder.appendChild(listItem);
-        i++;
-    }
-}
-
-export { renderProjectItem, renderTaskItem, renderProjectList, renderTaskList }
+export { renderProject, renderTask, renderProjectList, renderTaskList }
