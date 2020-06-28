@@ -1,7 +1,6 @@
 {
   "name": "top-todolist",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -19,6 +18,7 @@
   "homepage": "https://github.com/AdrielTrigger/top-todolist#readme",
   "devDependencies": {
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
-  }
+    "webpack-cli": "^3.3.12"
+  },
+  "description": ""
 }
