@@ -63,7 +63,6 @@ function loadData () {
                 }
             }
         }
-        alert('Data successfuly loaded.');
         return true;
     }
 }

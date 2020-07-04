@@ -9,6 +9,7 @@ class ProjectItem {
         this.deadline = deadline;
         this.position = projectList.list.length;
         this.taskList = [];
+        this.type = 'project';
         projectList.list.push(this);
     }
     
@@ -23,6 +24,7 @@ class TaskItem {
         this.title = title;
         this.deadline = deadline;
         this.position;
+        this.type = 'task';
         project.addTask(this);
     }
 }

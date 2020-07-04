@@ -1,6 +1,8 @@
 import { projectList, ProjectItem, TaskItem } from './project-and-task.js'
-import { renderProject, renderTask, renderProjectList } from './render.js'
+import { renderItem, renderProjectList } from './render.js'
 import { loadData } from './local-storage.js';
+import isToday from 'date-fns/isToday';
+import isAfter from 'date-fns/isAfter';
 
 // content holder elements
 let htmlProjectList = document.querySelector('.project-list');
@@ -59,12 +61,18 @@ projectForm.addEventListener('submit', (e) => {
     let title = document.querySelector('#project-title').value;
     let deadline = document.querySelector('#project-deadline').value;
 
-    let newProject = new ProjectItem(title,deadline);
-    renderProject(newProject,htmlProjectList);
-    htmlTaskList.innerHTML = '';
+    let date = parseDate(deadline);
 
-    closeForm(createProject,projectForm);
-    projectForm.reset();
+    if (isToday(date) || isAfter(date, new Date)) {
+        let newProject = new ProjectItem(title,deadline);
+        renderItem(newProject,htmlProjectList);
+        htmlTaskList.innerHTML = '';
+
+        closeForm(createProject,projectForm);
+        projectForm.reset();
+    } else {
+        alert('Please select a valid date. It must be today or later.');
+    }
 });
 
 taskForm.addEventListener('submit', (e) => {
@@ -73,21 +81,48 @@ taskForm.addEventListener('submit', (e) => {
     let title = document.querySelector('#task-title').value;
     let deadline = document.querySelector('#task-deadline').value;
 
-    let newTask = new TaskItem(title,deadline,activeProject);
-    renderTask(newTask,htmlTaskList,activeProject);
+    let date = parseDate(deadline);
 
-    closeForm(createTask,taskForm);
-    taskForm.reset();
+    if (isToday(date) || isAfter(date, new Date)) {
+        let newTask = new TaskItem(title,deadline,activeProject);
+        renderItem(newTask,htmlTaskList);
+    
+        closeForm(createTask,taskForm);
+        taskForm.reset();
+    } else {
+        alert('Please select a valid date. It must be today or later.');
+    }
 });
 
 function defineActiveProject(project) {
     activeProject = project;
 }
 
-function projectDeletion(project) {
+function activeProjectDeletion(project) {
     if (activeProject == project) {
         activeProject = null;
     }
+}
+
+function parseDate (stringDate) {
+    let year, month, day;
+    let stringYear = '';
+    let stringMonth = '';
+    let stringDay = '';
+    for (let i = 0; i < stringDate.length; i++) {
+        if (i < 4) {
+            stringYear += stringDate[i];
+        } else if (i > 4 && i < 7) {
+            stringMonth += stringDate[i];
+        } else if (i > 7) {
+            stringDay += stringDate[i];
+        }
+    }
+    year = parseInt(stringYear);
+    month = parseInt(stringMonth);
+    day = parseInt(stringDay);
+    let date = new Date(year,month - 1,day);
+    return date;
 }
 
 let activeProject;
@@ -100,4 +135,4 @@ if (loadData() == true) {
     activeProject = null;
 }
 
-export { activeProject, defineActiveProject, projectDeletion, htmlProjectList, htmlTaskList }
+export { activeProject, defineActiveProject, activeProjectDeletion, htmlProjectList, htmlTaskList, parseDate }

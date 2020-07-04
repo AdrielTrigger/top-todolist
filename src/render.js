@@ -1,93 +1,171 @@
-import { activeProject, defineActiveProject, projectDeletion, htmlProjectList, htmlTaskList } from './script.js'
+import { activeProject, defineActiveProject, activeProjectDeletion, htmlProjectList, htmlTaskList, parseDate } from './script.js'
 import { projectList } from './project-and-task.js'
 import { getData } from './local-storage.js';
+import isToday from 'date-fns/isToday';
+import isAfter from 'date-fns/isAfter';
 
-function renderProject (project,listHolder) {
-    let title = project.title;
-    let deadline = project.deadline;
-    let removal = false;
-
+function renderItem (ptItem,listHolder) { // pt stands for project/task
+    // creation of html elements
+    let wrapper = document.createElement('div');
+    let item = document.createElement('div');
+    let data = document.createElement('div');
     let htmlTitle = document.createElement('span');
     let htmlDeadline = document.createElement('span');
-    let htmlProjectData = document.createElement('div');
-    let buttons = document.createElement('div');
+    let itemButtons = document.createElement('div');
     let editButton = document.createElement('div');
     let deleteButton = document.createElement('div');
-    let htmlProject = document.createElement('div');
 
-    htmlTitle.innerHTML = `TITLE: ${title}`;
-    htmlDeadline.innerHTML = `DEADLINE: ${deadline}`;
+    htmlTitle.innerHTML = `TITLE: ${ptItem.title}`;
+    htmlDeadline.innerHTML = `DEADLINE: ${ptItem.deadline}`;
     editButton.innerHTML = 'EDIT';
     deleteButton.innerHTML = 'DELETE';
 
-    htmlProjectData.appendChild(htmlTitle);
-    htmlProjectData.appendChild(htmlDeadline);
-    htmlProjectData.classList.add('project-data');
+    // appending of created elements
+    data.appendChild(htmlTitle);
+    data.appendChild(htmlDeadline);
+    item.appendChild(data);
     
-    buttons.appendChild(editButton);
-    buttons.appendChild(deleteButton);
-    buttons.classList.add('project-item-buttons');
+    itemButtons.appendChild(editButton);
+    itemButtons.appendChild(deleteButton);
+    item.appendChild(itemButtons);
 
-    htmlProject.appendChild(htmlProjectData);
-    htmlProject.appendChild(buttons);
-    htmlProject.classList.add('project-item');
-    listHolder.appendChild(htmlProject);
+    wrapper.appendChild(item);
+    listHolder.appendChild(wrapper);
 
-    htmlProject.addEventListener('click', () => {
-        if (removal != true) {
-            makeActive(project,htmlProject);
+    // class assignments
+    wrapper.classList.add('item-wrapper');
+    if (ptItem.type == 'project') {
+        item.classList.add('project-item');
+        data.classList.add('project-data');
+        itemButtons.classList.add('project-item-buttons');
+    } else if (ptItem.type == 'task') {
+        item.classList.add('task-item');
+        data.classList.add('task-data');
+        itemButtons.classList.add('task-item-buttons');
+    }
+
+    // color scheme auto-selection
+    if (ptItem.type == 'project') {
+        wrapper.style.setProperty('background-color','white');
+        wrapper.style.setProperty('color','rgb(34, 139, 158)');
+    } else if (ptItem.type = 'task') {
+        wrapper.style.setProperty('background-color','rgb(34, 139, 158)');
+        wrapper.style.setProperty('color','white');
+    }
+
+    // implementation of features
+    let removal = false;
+
+    // project item selection
+    wrapper.addEventListener('click', () => {
+        if (removal == false && ptItem.type == 'project') {
+            makeActive(ptItem,wrapper);
             htmlTaskList.innerHTML = '';
-            renderTaskList(project);
+            renderTaskList(ptItem);
         }
     });
 
-    deleteButton.addEventListener('click', () => {
-        removal = true;
-        listHolder.removeChild(htmlProject);
-        projectList.list.splice(project.position,1);
-        htmlTaskList.innerHTML = '';
-        projectDeletion(project);
-        getData(projectList.list);
+    // item editting
+    editButton.addEventListener('click', () => {
+        // prevention against overexposition of features
+        item.style.setProperty('display','none');
+
+        // creation of html menu elements
+        let editMenu = document.createElement('div');
+        let editArea = document.createElement('div');
+        let titleLabel = document.createElement('label');
+        let deadlineLabel = document.createElement('label');
+        let newTitle = document.createElement('input');
+        let newDeadline = document.createElement('input');
+        let editButtons = document.createElement('div');
+        let submit = document.createElement('div');
+        let cancel = document.createElement('div');
+
+        titleLabel.innerHTML = 'NEW TITLE:';
+        deadlineLabel.innerHTML = 'NEW DEADLINE:';
+        newTitle.value = ptItem.title;
+        newDeadline.value = ptItem.deadline;
+        submit.innerHTML = 'SUBMIT';
+        cancel.innerHTML = 'CANCEL';
+
+        // appending of elements
+        editArea.appendChild(titleLabel);
+        editArea.appendChild(newTitle);
+        editArea.appendChild(deadlineLabel);
+        editArea.appendChild(newDeadline);
+
+        editButtons.appendChild(submit);
+        editButtons.appendChild(cancel);
+
+        editMenu.appendChild(editArea);
+        editMenu.appendChild(editButtons);
+
+        wrapper.appendChild(editMenu);
+
+        // class assignments
+        editMenu.classList.add('edit-menu');
+        editArea.classList.add('edit-area');
+        editButtons.classList.add('edit-buttons');
+        newDeadline.setAttribute('type','date');
+
+        // color scheme auto-selection
+        if (ptItem.type == 'project') {
+            editMenu.style.setProperty('background-color','rgb(34, 139, 158)');
+            editMenu.style.setProperty('color','white');
+            submit.style.setProperty('background-color','white');
+            submit.style.setProperty('color','rgb(34, 139, 158)');
+            cancel.style.setProperty('background-color','white');
+            cancel.style.setProperty('color','rgb(34, 139, 158)');
+        } else if (ptItem.type = 'task') {
+            editMenu.style.setProperty('background-color','white');
+            editMenu.style.setProperty('color','rgb(34, 139, 158)');
+            submit.style.setProperty('background-color','rgb(34, 139, 158)');
+            submit.style.setProperty('color','white');
+            cancel.style.setProperty('background-color','rgb(34, 139, 158)');
+            cancel.style.setProperty('color','white');
+        }
+
+        // edit buttons functions
+
+        // submit button
+        submit.addEventListener('click', () => {
+            ptItem.title = newTitle.value;
+            ptItem.deadline = newDeadline.value;
+
+            let date = parseDate(newDeadline.value);
+
+            if (isToday(date) || isAfter(date, new Date)) {
+                htmlTitle.innerHTML = `TITLE: ${newTitle.value}`;
+                htmlDeadline.innerHTML = `DEADLINE ${newDeadline.value}`;
+                item.style.setProperty('display','flex');
+                wrapper.removeChild(editMenu);
+                getData(projectList.list);
+            } else {
+                alert('Please select a valid date. It must be today or later.');
+            }
+        });
+
+        // cancel button
+        cancel.addEventListener('click', () => {
+            item.style.setProperty('display','flex');
+            wrapper.removeChild(editMenu);
+        });
     });
 
-    makeActive(project,htmlProject);
-    getData(projectList.list);
-}
-
-function renderTask (task,listHolder) {
-    let title = task.title;
-    let deadline = task.deadline;
-
-    let htmlTitle = document.createElement('span');
-    let htmlDeadline = document.createElement('span');
-    let htmlTaskData = document.createElement('div');
-    let buttons = document.createElement('div');
-    let editButton = document.createElement('div');
-    let deleteButton = document.createElement('div');
-    let htmlTask = document.createElement('div');
-
-    htmlTitle.innerHTML = `TITLE: ${title}`;
-    htmlDeadline.innerHTML = `DEADLINE: ${deadline}`;
-    editButton.innerHTML = 'EDIT';
-    deleteButton.innerHTML = 'DELETE';
-
-    htmlTaskData.appendChild(htmlTitle);
-    htmlTaskData.appendChild(htmlDeadline);
-    htmlTaskData.classList.add('task-data');
-
-    buttons.appendChild(editButton);
-    buttons.appendChild(deleteButton);
-    buttons.classList.add('task-item-buttons');
-
-    htmlTask.appendChild(htmlTaskData);
-    htmlTask.appendChild(buttons);
-    htmlTask.classList.add('task-item');
-    listHolder.appendChild(htmlTask);
-
+    // item deletion
     deleteButton.addEventListener('click', () => {
-        activeProject.taskList.splice(task.position,1);
-        listHolder.removeChild(htmlTask);
-        getData(projectList.list);
+        removal = true;
+        if (ptItem.type == 'project') {
+            projectList.list.splice(ptItem.position,1);
+            if (activeProject == ptItem) {
+                htmlTaskList.innerHTML = '';
+                activeProjectDeletion(project);
+            }
+        } else if (ptItem.type == 'task') {
+            activeProject.taskList.splice(ptItem.position,1);
+        }
+        listHolder.removeChild(wrapper);
+        getData(projectList.list)
     });
 
     getData(projectList.list);
@@ -95,25 +173,25 @@ function renderTask (task,listHolder) {
 
 function renderProjectList (list) {
     for (let i = 0; i < list.length; i++) {
-        renderProject(list[i],htmlProjectList);
+        renderItem(list[i],htmlProjectList);
     }
 }
 
 function renderTaskList (project) {
     for (let i = 0; i < project.taskList.length; i++) {
-        renderTask(project.taskList[i],htmlTaskList);
+        renderItem(project.taskList[i],htmlTaskList);
     }
 }
 
-function makeActive (project,htmlProject) {
+function makeActive (project,wrapper) {
     defineActiveProject(project);
-    let projects = document.querySelectorAll('.project-item');
+    let projects = htmlProjectList.querySelectorAll('.item-wrapper');
     
     for (let i = 0; i < projects.length; i++) {
         projects[i].style.setProperty('border','none');
     }
 
-    htmlProject.style.setProperty('border','3px solid blue');
+    wrapper.style.setProperty('border','3px solid blue');
 }
 
-export { renderProject, renderTask, renderProjectList, renderTaskList }
+export { renderItem, renderProjectList, renderTaskList }
