@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<head>
+
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+    <title>TOP ToDo List Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito&family=Varela+Round&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <header>Projeto Gerenciador de Tarefas
+        <div class="localization">
+            <span>Mudar idioma e formato de data</span>
+            <div class="options">
+                <div class="flag usa"></div>
+                <div class="flag brazil"></div>
+            </div>
+        </div>
+    </header>
+
+    <div class="project-area">
+        <div class="create-project">Criar Novo Projeto</div>
+        <form class="project-form">
+            <label for="project-title">TÍTULO</label>
+            <input type="text" id="project-title" required>
+            <label for="project-deadline">DATA LIMITE</label>
+            <input type="date" id="project-deadline" required>
+            <div class="project-buttons">
+                <button type="submit">CRIAR PROJETO</button>
+                <button class="cancel-project">CANCELAR</button>
+            </div>
+        </form>
+        <div class="project-list"></div>
+    </div>
+
+    <div class="task-area">
+        <div class="create-task">Criar Nova Tarefa</div>
+        <form class="task-form">
+            <label for="task-name">TÍTULO</label>
+            <input type="text" id="task-title" required>
+            <label for="task-deadline">DATA LIMITE</label>
+            <input type="date" id="task-deadline" required>
+            <div class="task-buttons">
+                <button type="submit">CRIAR TAREFA</button>
+                <button class="cancel-task">CANCELAR</button>
+            </div>
+        </form>
+        <div class="task-list"></div>
+    </div>
+
+    <script src="./main.js"></script>
+
+</body>
