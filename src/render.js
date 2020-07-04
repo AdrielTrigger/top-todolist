@@ -1,4 +1,4 @@
-import { activeProject, defineActiveProject, activeProjectDeletion, htmlProjectList, htmlTaskList, parseDate } from './script.js'
+import { activeProject, defineActiveProject, activeProjectDeletion, htmlProjectList, htmlTaskList, parseDate, formatDate } from './script.js'
 import { projectList } from './project-and-task.js'
 import { getData } from './local-storage.js';
 import isToday from 'date-fns/isToday';
@@ -18,7 +18,7 @@ function renderItem (ptItem,listHolder) { // pt stands for project/task
     let deleteButton = document.createElement('div');
 
     htmlTitle.innerHTML = `TITLE: ${ptItem.title}`;
-    htmlDeadline.innerHTML = `DEADLINE: ${ptItem.deadline}`;
+    htmlDeadline.innerHTML = `DEADLINE: ${formatDate(ptItem.deadline)}`;
     editButton.innerHTML = 'EDIT';
     deleteButton.innerHTML = 'DELETE';
 
@@ -140,7 +140,7 @@ function renderItem (ptItem,listHolder) { // pt stands for project/task
                 let projectDate = parseDate(activeProject.deadline);
                 if ((isToday(date) || isAfter(date, new Date)) && (isSameDay(date,projectDate) || isBefore(date,projectDate))) {
                     htmlTitle.innerHTML = `TITLE: ${newTitle.value}`;
-                    htmlDeadline.innerHTML = `DEADLINE ${newDeadline.value}`;
+                    htmlDeadline.innerHTML = `DEADLINE ${formatDate(newDeadline.value)}`;
                     item.style.setProperty('display','flex');
                     wrapper.removeChild(editMenu);
                     getData(projectList.list);
@@ -149,7 +149,7 @@ function renderItem (ptItem,listHolder) { // pt stands for project/task
                 }
             } else if (isToday(date) || isAfter(date, new Date && ptItem.type == 'project')) {
                 htmlTitle.innerHTML = `TITLE: ${newTitle.value}`;
-                htmlDeadline.innerHTML = `DEADLINE ${newDeadline.value}`;
+                htmlDeadline.innerHTML = `DEADLINE ${formatDate(newDeadline.value)}`;
                 item.style.setProperty('display','flex');
                 wrapper.removeChild(editMenu);
                 getData(projectList.list);

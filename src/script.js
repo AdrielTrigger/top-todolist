@@ -128,6 +128,24 @@ function parseDate (stringDate) {
     return date;
 }
 
+function formatDate (stringDate) {
+    let stringYear = '';
+    let stringMonth = '';
+    let stringDay = '';
+    for (let i = 0; i < stringDate.length; i++) {
+        if (i < 4) {
+            stringYear += stringDate[i];
+        } else if (i > 4 && i < 7) {
+            stringMonth += stringDate[i];
+        } else if (i > 7) {
+            stringDay += stringDate[i];
+        }
+    }
+
+    let formatedDate = `${stringMonth}/${stringDay}/${stringYear}`;
+    return formatedDate;
+}
+
 let activeProject;
 if (loadData() == true) {
     renderProjectList(projectList.list);
@@ -138,4 +156,5 @@ if (loadData() == true) {
     activeProject = null;
 }
 
-export { activeProject, defineActiveProject, activeProjectDeletion, htmlProjectList, htmlTaskList, parseDate }
+export { activeProject, defineActiveProject, activeProjectDeletion,
+htmlProjectList, htmlTaskList, parseDate, formatDate }
