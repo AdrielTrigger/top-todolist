@@ -172,7 +172,7 @@ function renderItem (ptItem,listHolder) { // pt stands for project/task
             projectList.list.splice(ptItem.position,1);
             if (activeProject == ptItem) {
                 htmlTaskList.innerHTML = '';
-                activeProjectDeletion(project);
+                activeProjectDeletion(ptItem);
             }
         } else if (ptItem.type == 'task') {
             activeProject.taskList.splice(ptItem.position,1);
