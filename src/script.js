@@ -149,7 +149,7 @@ function formatDate (stringDate) {
 let activeProject;
 if (loadData() == true) {
     renderProjectList(projectList.list);
-    let projects = document.querySelectorAll('.project-item');
+    let projects = htmlProjectList.querySelectorAll('.item-wrapper');
     for (let i = 0; i < projects.length; i++) {
         projects[i].style.setProperty('border','none');
     }
