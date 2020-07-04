@@ -74,7 +74,7 @@ header {
 
 .project-buttons, .task-buttons {
     width: 100%;
-    height: 50px;
+    height: 60px;
     display: flex;
     justify-content: space-evenly;
 }
@@ -89,13 +89,15 @@ header {
 
 .project-buttons button:hover, .task-buttons button:hover,
 .create-project:hover, .create-task:hover,
-.project-item-buttons div:hover, .task-item-buttons div:hover {
+.project-item-buttons div:hover, .task-item-buttons div:hover,
+.edit-buttons div:hover {
     border: 3px solid rgba(0, 224, 112, 0.842);
 }
 
 .project-buttons button:active, .task-buttons button:active,
 .create-project:active, .create-task:active,
-.project-item-buttons div:active, .task-item-buttons div:active {
+.project-item-buttons div:active, .task-item-buttons div:active,
+.edit-buttons div:active {
     border: 3px solid gold;
 }
 
@@ -120,71 +122,82 @@ input {
     margin-bottom: 20px;
 }
 
-
 /* content holders and project and task items */
 
 .project-list, .task-list {
-    height: 100%;
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow: scroll;
 }
 
-.project-item, .task-item {
+.item-wrapper {
     width: 80%;
-    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     border-radius: 15px;
-    margin-top: 20px;
+    padding: 3px;
+    margin-top: 15px;
+}
+
+.project-item, .task-item {
+    width: 100%;
+    height: 80px;
     padding: 5px;
     display: flex;
     justify-content: space-evenly;
-    align-items: center;
 }
 
-.project-item {
-    background-color: white;
-    color: rgb(83, 199, 219);
-}
-
-.project-data, .task-data {
+.project-data, .project-item-buttons, .task-data, .task-item-buttons {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    height: 90%;
-    width: 70%;
-    border-radius: 10px;
 }
 
-.project-item-buttons, .task-item-buttons {
+.project-data, .task-data, .edit-menu {
+    width: 65%;
+}
+
+.project-item-buttons, .task-item-buttons, .edit-buttons {
+    width: 30%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    width: 25%;
-    height: 85%;
+    justify-content: space-evenly;
 }
 
-.project-item-buttons div, .task-item-buttons div {
+.project-item-buttons div, .task-item-buttons div, .edit-buttons div {
     display: flex;
     justify-content: center;
-    width: 100%;
+    align-items: center;
+    width: 90%;
+    padding: 5px;
     border-radius: 5px;
-    margin: 3px;
-    padding: 3px;
 }
 
 .project-item-buttons div {
-    background-color: rgb(83, 199, 219);
+    background-color: rgb(34, 139, 158);
     color: white;
 }
 
 .task-item-buttons div {
     background-color: white;
-    color: rgb(83, 199, 219);
+    color: rgb(34, 139, 158);
 }
 
-.task-item {
-    background-color: rgb(83, 199, 219);
-    color: white;
+.edit-menu {
+    width: 95%;
+    display: flex;
+    justify-content: space-evenly;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.edit-area, .edit-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
 }
