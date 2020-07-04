@@ -93,7 +93,7 @@ taskForm.addEventListener('submit', (e) => {
         closeForm(createTask,taskForm);
         taskForm.reset();
     } else {
-        alert('Please select a valid date. It must be today or later.');
+        alert('Please select a valid date. It must respect the project deadline.');
     }
 });
 

@@ -144,8 +144,10 @@ function renderItem (ptItem,listHolder) { // pt stands for project/task
                     item.style.setProperty('display','flex');
                     wrapper.removeChild(editMenu);
                     getData(projectList.list);
+                } else {
+                    alert('Please select a valid date. It must respect the project deadline.');
                 }
-            } else if (isToday(date) || isAfter(date, new Date)) {
+            } else if (isToday(date) || isAfter(date, new Date && ptItem.type == 'project')) {
                 htmlTitle.innerHTML = `TITLE: ${newTitle.value}`;
                 htmlDeadline.innerHTML = `DEADLINE ${newDeadline.value}`;
                 item.style.setProperty('display','flex');
