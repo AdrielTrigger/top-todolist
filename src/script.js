@@ -86,7 +86,7 @@ taskForm.addEventListener('submit', (e) => {
     let date = parseDate(deadline);
     let projectDate = parseDate(activeProject.deadline);
 
-    if (isToday(date) || isAfter(date, new Date) && isSameDay(date,projectDate) || isBefore(date,projectDate)) {
+    if ((isToday(date) || isAfter(date, new Date)) && (isSameDay(date,projectDate) || isBefore(date,projectDate))) {
         let newTask = new TaskItem(title,deadline,activeProject);
         renderItem(newTask,htmlTaskList);
     

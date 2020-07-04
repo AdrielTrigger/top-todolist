@@ -138,7 +138,7 @@ function renderItem (ptItem,listHolder) { // pt stands for project/task
 
             if (ptItem.type == 'task') {
                 let projectDate = parseDate(activeProject.deadline);
-                if (isToday(date) || isAfter(date, new Date) && isSameDay(date,projectDate) || isBefore(date,projectDate)) {
+                if ((isToday(date) || isAfter(date, new Date)) && (isSameDay(date,projectDate) || isBefore(date,projectDate))) {
                     htmlTitle.innerHTML = `TITLE: ${newTitle.value}`;
                     htmlDeadline.innerHTML = `DEADLINE ${newDeadline.value}`;
                     item.style.setProperty('display','flex');
@@ -180,6 +180,10 @@ function renderItem (ptItem,listHolder) { // pt stands for project/task
         listHolder.removeChild(wrapper);
         getData(projectList.list)
     });
+
+    if (ptItem.type == 'project') {
+        makeActive(ptItem,wrapper);
+    }
 
     getData(projectList.list);
 }
