@@ -3,6 +3,8 @@ import { renderItem, renderProjectList } from './render.js'
 import { loadData } from './local-storage.js';
 import isToday from 'date-fns/isToday';
 import isAfter from 'date-fns/isAfter';
+import isSameDay from 'date-fns/isSameDay';
+import isBefore from 'date-fns/isBefore';
 
 // content holder elements
 let htmlProjectList = document.querySelector('.project-list');
@@ -82,8 +84,9 @@ taskForm.addEventListener('submit', (e) => {
     let deadline = document.querySelector('#task-deadline').value;
 
     let date = parseDate(deadline);
+    let projectDate = parseDate(activeProject.deadline);
 
-    if (isToday(date) || isAfter(date, new Date)) {
+    if (isToday(date) || isAfter(date, new Date) && isSameDay(date,projectDate) || isBefore(date,projectDate)) {
         let newTask = new TaskItem(title,deadline,activeProject);
         renderItem(newTask,htmlTaskList);
     

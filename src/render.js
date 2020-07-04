@@ -3,6 +3,8 @@ import { projectList } from './project-and-task.js'
 import { getData } from './local-storage.js';
 import isToday from 'date-fns/isToday';
 import isAfter from 'date-fns/isAfter';
+import isSameDay from 'date-fns/isSameDay';
+import isBefore from 'date-fns/isBefore';
 
 function renderItem (ptItem,listHolder) { // pt stands for project/task
     // creation of html elements
@@ -134,7 +136,16 @@ function renderItem (ptItem,listHolder) { // pt stands for project/task
 
             let date = parseDate(newDeadline.value);
 
-            if (isToday(date) || isAfter(date, new Date)) {
+            if (ptItem.type == 'task') {
+                let projectDate = parseDate(activeProject.deadline);
+                if (isToday(date) || isAfter(date, new Date) && isSameDay(date,projectDate) || isBefore(date,projectDate)) {
+                    htmlTitle.innerHTML = `TITLE: ${newTitle.value}`;
+                    htmlDeadline.innerHTML = `DEADLINE ${newDeadline.value}`;
+                    item.style.setProperty('display','flex');
+                    wrapper.removeChild(editMenu);
+                    getData(projectList.list);
+                }
+            } else if (isToday(date) || isAfter(date, new Date)) {
                 htmlTitle.innerHTML = `TITLE: ${newTitle.value}`;
                 htmlDeadline.innerHTML = `DEADLINE ${newDeadline.value}`;
                 item.style.setProperty('display','flex');
